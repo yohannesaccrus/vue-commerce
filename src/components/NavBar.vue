@@ -10,7 +10,7 @@
       </a>
       <router-link to="/" class="navBar__menu">Home</router-link>
       <router-link to="/about" class="navBar__menu">About</router-link>
-      
+      <a data-toggle="modal" data-target="#login" href="#" class="navBar__menu navBar__menu--login">Login</a>
     </div>
   </div>
 </template>

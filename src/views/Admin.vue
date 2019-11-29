@@ -51,25 +51,25 @@
                 <span>Menu</span>
               </li>
               <li>
-                <a href="#">
+                <router-link to="/admin/overview">
                   <i class="fa fa-chart-pie"></i>
                   <span class="menu-text">Overview</span>
-                </a>
+                </router-link>
               </li>
               <li>
-                <a href="#">
+                <router-link to="/admin/products">
                   <i class="fa fa-camera"></i>
                   <span class="menu-text">Products</span>
-                </a>
+                </router-link>
               </li>
               <li>
-                <a href="#">
+                <router-link to="/admin/orders">
                   <i class="fas fa-cart-plus"></i>
                   <span class="menu-text">Orders</span>
-                </a>
+                </router-link>
               </li>
               <li>
-                <a href="#">
+                <a href="#" @click="signOut">
                   <i class="fas fa-power-off"></i>
                   <span class="menu-text">Logout</span>
                 </a>
@@ -92,11 +92,21 @@
 
 <script>
 import $ from 'jquery';
+import { fb } from '../firebase';
 export default {
   name: "admin",
   methods: {
     closeMenu(){
       $(".page-wrapper").toggleClass("toggled");
+    },
+    signOut() {
+      fb.auth().signOut()
+      .then(() => {
+        this.$router.replace('/');
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     }
   }
 };

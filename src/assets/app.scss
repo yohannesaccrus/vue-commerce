@@ -49,6 +49,13 @@ a {
       color: $white !important;
       background-color: $green;
     }
+    &--login {
+      background-color: $green;
+      color: $white !important;
+      &:hover {
+        background-color: $light-green;
+      }
+    }
   }
 }
 
@@ -175,6 +182,39 @@ a {
           }
 
         }
+      }
+    }
+  }
+}
+
+//admin
+.vueAdmin {
+  // background-color: tomato;
+  padding: 0 5%; 
+}
+.admin {
+  &Hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__texts {
+      // background-color: red;
+      flex-basis: 65%;
+      h2 {
+        font-weight: 600;
+      }
+      p {
+        color: $grey;
+        text-align: justify;
+      }
+    }
+    &__visual {
+      // background-color: yellow;
+      flex-basis: 25%;
+      img {
+        height: 15rem;
+        width: 20rem;
+        object-fit: contain;
       }
     }
   }
