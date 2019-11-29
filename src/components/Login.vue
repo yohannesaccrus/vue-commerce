@@ -46,19 +46,29 @@
                 <h5 class="text-center">Login Please</h5>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" placeholder="Enter email" />
+                  <input
+                    type="email"
+                    v-model="email"
+                    class="form-control"
+                    placeholder="Enter email"
+                  />
                   <small class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputEmail1">Password</label>
-                  <input type="password" class="form-control" placeholder="Enter Password" />
+                  <input
+                    type="password"
+                    v-model="password"
+                    class="form-control"
+                    placeholder="Enter Password"
+                  />
                   <small
                     class="form-text text-muted"
                   >We'll never share your password with anyone else.</small>
                 </div>
 
                 <div class="form-group">
-                  <button class="btn btn-primary">Login</button>
+                  <button class="btn btn-primary" @click="signin">Sign In</button>
                 </div>
               </div>
               <div
@@ -113,7 +123,7 @@
 
 <script>
 import { fb } from "../firebase";
-import $ from 'jquery';
+import $ from "jquery";
 export default {
   name: "login",
   data() {
@@ -124,6 +134,25 @@ export default {
     };
   },
   methods: {
+    signin() {
+      fb.auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          $("#login").modal("hide");
+          this.$router.replace("admin");
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode == "auth/wrong-password") {
+            alert("Wrong Password");
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+        });
+    },
     signup() {
       fb.auth()
         .createUserWithEmailAndPassword(this.email, this.password)
