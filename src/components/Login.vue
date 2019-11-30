@@ -61,6 +61,7 @@
                     v-model="password"
                     class="form-control"
                     placeholder="Enter Password"
+                    @keyup.enter="signin"
                   />
                   <small
                     class="form-text text-muted"

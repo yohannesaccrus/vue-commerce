@@ -69,6 +69,12 @@
                 </router-link>
               </li>
               <li>
+                <router-link to="/admin/crud">
+                  <i class="fas fa-plus"></i>
+                  <span class="menu-text">CRUD</span>
+                </router-link>
+              </li>
+              <li>
                 <a href="#" @click="signOut">
                   <i class="fas fa-power-off"></i>
                   <span class="menu-text">Logout</span>
