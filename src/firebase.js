@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-require("firebase/firestore");
 
 // Your web app's Firebase configuration
 var firebaseConfig = {

@@ -228,3 +228,17 @@ a {
     padding: 1.5rem 1.5rem 0 1.5rem;
   }
 }
+
+.modal {
+  &__body {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__main {
+    flex-basis: 60%;
+  }
+  &__detail {
+    flex-basis: 35%;
+  }
+    
+}
