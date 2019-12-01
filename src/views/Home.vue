@@ -4,6 +4,7 @@
     <homeHero></homeHero>
     <homeProducts></homeProducts>
     <Login></Login>
+    <mini-cart></mini-cart>
   </div>
 </template>
 
@@ -14,7 +15,7 @@ import Login from "@/components/Login.vue";
 export default {
   name: "home",
   components: {
-    homeHero, 
+    homeHero,
     homeProducts,
     Login
   }

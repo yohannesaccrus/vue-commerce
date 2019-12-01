@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { fb } from "../firebase";
+import { fb, db } from "../firebase";
 import $ from "jquery";
 export default {
   name: "login",
@@ -157,8 +157,17 @@ export default {
     signup() {
       fb.auth()
         .createUserWithEmailAndPassword(this.email, this.password)
-        .then(() => {
+        .then((user) => {
           $("#login").modal("hide");
+          db.collection("profiles").doc(user.user.uid).set({
+            name: this.name,
+          })
+          .then(() => {
+            console.log("user succesfully created");
+          })
+          .catch(err => {
+            console.log("error writing", err);
+          })
           this.$router.replace("admin");
         })
         .catch(function(error) {

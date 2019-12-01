@@ -48,12 +48,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <textarea
-                    v-model="product.desc"
-                    placeholder="Product desc."
-                    class="form-control"
-                    rows="8"
-                  ></textarea>
+                  <vue-editor v-model="product.desc"></vue-editor>
                 </div>
               </div>
               <div class="modal__detail">
@@ -68,15 +63,37 @@
                 </div>
                 <div class="form-group">
                   <input
-                    v-model="product.tag"
+                    v-model="tag"
+                    @keyup.188="addTag"
                     type="text"
                     placeholder="Product Tag"
                     class="form-control"
                   />
+                  <div class="modal__tags">
+                    <span
+                      v-for="(tag, index) in product.tags"
+                      :key="index"
+                      class="badge badge-pill badge-primary"
+                    >{{ tag.replace(',', '') }}</span>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="exampleFormControlFile1">Gambar</label>
-                  <input type="file" class="form-control-file" id="exampleFormControlFile1" />
+                  <input
+                    type="file"
+                    @change="uploadProductImage"
+                    class="form-control-file"
+                    id="exampleFormControlFile1"
+                  />
+
+                  <div class="modal__images">
+                    <div class="modal__image" v-for="(image, index) in product.images" :key="index">
+                      <button @click="deleteImage(image, index)">
+                        <i class="fas fa-times"></i>
+                      </button>
+                      <img :src="image" alt="img" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -102,9 +119,10 @@
 </template>
 
 <script>
-import { db } from "../firebase";
+import { fb, db } from "../firebase";
 import $ from "jquery";
 import Swal from "sweetalert2";
+import { VueEditor } from "vue2-editor";
 const Toast = Swal.mixin({
   toast: true,
   position: "top-end",
@@ -119,6 +137,9 @@ const Toast = Swal.mixin({
 
 export default {
   name: "products",
+  components: {
+    VueEditor
+  },
   data() {
     return {
       heroImage: require("../assets/img/products.svg"),
@@ -126,9 +147,10 @@ export default {
         name: null,
         desc: null,
         price: null,
-        tag: null,
-        image: null
+        tags: [],
+        images: []
       },
+      tag: null,
       mode: null,
       updatedProduct: null
     };
@@ -139,9 +161,12 @@ export default {
     };
   },
   methods: {
+    reset() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+    },
     modalCreate() {
       $("#createProduct").modal("show");
-      Object.assign(this.$data, this.$options.data.apply(this));
+      this.reset();
       this.mode = "create";
     },
     createProduct() {
@@ -179,6 +204,45 @@ export default {
           });
         }
       });
+    },
+    addTag() {
+      const newTag = this.tag.replace(",", "");
+      this.product.tags.push(newTag);
+      this.tag = "";
+    },
+    uploadProductImage(e) {
+      if (e.target.files[0]) {
+        let file = e.target.files[0];
+        let storageRef = fb.storage().ref("products/" + file.name);
+        let uploadTask = storageRef.put(file);
+
+        uploadTask.on(
+          "state_changed",
+          snapshot => {},
+          err => {
+            console.log("upload failed", err);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+              this.product.images.push(downloadURL);
+              console.log("URL: ", downloadURL);
+            });
+          }
+        );
+      }
+    },
+    deleteImage(image, index) {
+      let selectedImage = fb.storage().refFromURL(image);
+
+      this.product.images.splice(index, 1);
+      selectedImage
+        .delete()
+        .then(() => {
+          console.log("image deleted");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

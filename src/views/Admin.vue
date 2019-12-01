@@ -1,9 +1,9 @@
 <template>
   <div class="admin">
     <div class="page-wrapper default-theme sidebar-bg bg1 toggled">
-        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#" @click="closeMenu">
-            <i class="fas fa-bars"></i>
-        </a>
+      <a id="show-sidebar" class="btn btn-sm btn-dark" href="#" @click="closeMenu">
+        <i class="fas fa-bars"></i>
+      </a>
       <nav id="sidebar" class="sidebar-wrapper">
         <div class="sidebar-content">
           <!-- sidebar-brand  -->
@@ -16,14 +16,19 @@
           <!-- sidebar-header  -->
           <div class="sidebar-item sidebar-header d-flex flex-nowrap">
             <div class="user-pic">
-              <img class="img-responsive img-rounded" style="border-radius:50%" src="http://bit.ly/35OVHht" alt="User picture" />
+              <img
+                class="img-responsive img-rounded"
+                style="border-radius:50%"
+                src="http://bit.ly/35OVHht"
+                alt="User picture"
+              />
             </div>
             <div class="user-info">
               <span class="user-name">
                 Jhon
                 <strong>Smith</strong>
               </span>
-              <span class="user-role">Administrator</span>
+              <span class="user-role">{{email}}</span>
               <span class="user-status">
                 <i class="fa fa-circle"></i>
                 <span>Online</span>
@@ -46,7 +51,6 @@
           <!-- sidebar-menu  -->
           <div class="sidebar-item sidebar-menu">
             <ul>
-              
               <li class="header-menu">
                 <span>Menu</span>
               </li>
@@ -68,12 +72,18 @@
                   <span class="menu-text">Orders</span>
                 </router-link>
               </li>
+              <li>
+                <router-link to="/admin/profile">
+                  <i class="fas fa-user"></i>
+                  <span class="menu-text">profile</span>
+                </router-link>
+              </li>
               <!-- <li>
                 <router-link to="/admin/crud">
                   <i class="fas fa-plus"></i>
                   <span class="menu-text">CRUD</span>
                 </router-link>
-              </li> -->
+              </li>-->
               <li>
                 <a href="#" @click="signOut">
                   <i class="fas fa-power-off"></i>
@@ -88,7 +98,7 @@
       </nav>
       <!-- page-content  -->
       <main class="page-content pt-2">
-        <router-view/>
+        <router-view />
       </main>
       <!-- page-content" -->
     </div>
@@ -97,23 +107,33 @@
 </template>
 
 <script>
-import $ from 'jquery';
-import { fb } from '../firebase';
+import $ from "jquery";
+import { fb } from "../firebase";
 export default {
   name: "admin",
+  data() {
+    return {
+      email: null
+    };
+  },
   methods: {
-    closeMenu(){
+    closeMenu() {
       $(".page-wrapper").toggleClass("toggled");
     },
     signOut() {
-      fb.auth().signOut()
-      .then(() => {
-        this.$router.replace('/');
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+      fb.auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace("/");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  },
+  created() {
+    let user = fb.auth().currentUser;
+    this.email = user.email;
   }
 };
 </script>

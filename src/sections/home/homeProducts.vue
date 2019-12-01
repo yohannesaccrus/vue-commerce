@@ -3,40 +3,24 @@
     <div class="homeProducts">
       <h1>Our Products</h1>
       <div class="products">
-        <div class="product">
+        <div class="product" v-for="product in products">
           <div class="product__visual">
-            <img :src="image1" alt />
+            <carousel :perPage="1">
+              <slide v-for="(image, index) in product.images" :key="index">
+                <img :src="image" alt="..." />
+              </slide>
+            </carousel>
           </div>
           <div class="product__texts">
-            <p class="name">Surface</p>
-            <p
-              class="desc"
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil fuga perferendis, reiciendis fugiat temporibus quasi iste esse. Perspiciatis, consectetur autem esse ipsam temporibus iusto consequatur nisi enim voluptatum vero tempora.</p>
-            <button class="vueBtn vueBtn--green">Add to Cart</button>
-          </div>
-        </div>
-         <div class="product">
-          <div class="product__visual">
-            <img :src="image2" alt />
-          </div>
-          <div class="product__texts">
-            <p class="name">Surface</p>
-            <p
-              class="desc"
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil fuga perferendis, reiciendis fugiat temporibus quasi iste esse. Perspiciatis, consectetur autem esse ipsam temporibus iusto consequatur nisi enim voluptatum vero tempora.</p>
-            <button class="vueBtn vueBtn--green">Add to Cart</button>
-          </div>
-        </div>
-         <div class="product">
-          <div class="product__visual">
-            <img :src="image3" alt />
-          </div>
-          <div class="product__texts">
-            <p class="name">Surface</p>
-            <p
-              class="desc"
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil fuga perferendis, reiciendis fugiat temporibus quasi iste esse. Perspiciatis, consectetur autem esse ipsam temporibus iusto consequatur nisi enim voluptatum vero tempora.</p>
-            <button class="vueBtn vueBtn--green">Add to Cart</button>
+            <p class="name">{{ product.name }}</p>
+            <p class="price">{{ product.price | currency }}</p>
+            <p class="desc" v-html="product.desc"></p>
+            <add-to-cart
+              :p-id="product.id"
+              :image="getImage(product.images)"
+              :name="product.name"
+              :price="product.price"
+            ></add-to-cart>
           </div>
         </div>
       </div>
@@ -45,13 +29,25 @@
 </template>
 
 <script>
+import { db } from "../../firebase";
 export default {
   name: "homeProducts",
   data() {
     return {
-      image1: "http://bit.ly/37NMuHM",
-      image2: "http://bit.ly/33uh1Hr",
-      image3: "http://bit.ly/2L661JM"
+      // image1: "http://bit.ly/37NMuHM",
+      // image2: "http://bit.ly/33uh1Hr",
+      // image3: "http://bit.ly/2L661JM"
+      products: []
+    };
+  },
+  methods: {
+    getImage(images) {
+      return images[0];
+    }
+  },
+  firestore() {
+    return {
+      products: db.collection("products")
     };
   }
 };
